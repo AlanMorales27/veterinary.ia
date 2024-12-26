@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './assets/style.css';
 import ThreeScene from './components/three';
-
+import data from "./assets/data/data-example.js"
 const App = () => {
 
   const razas_perro = ["raza1", "raza2", "raza3", "raza4", "raza5", "raza6"];
   
+  const net = new brain.NeuralNetwork();
+  net.train(data);
+
+
+
   return(
     <main>
       <div className='principal-container'>
