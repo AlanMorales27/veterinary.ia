@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const ThreeScene = () => {
   const mountRef = useRef(null);
@@ -7,31 +9,46 @@ const ThreeScene = () => {
   useEffect(() => {
     // Configuración básica
     const scene = new THREE.Scene();
+    const loader = new FBXLoader();
     const camera = new THREE.PerspectiveCamera(
-      75, 
-      window.innerWidth / window.innerHeight, 
-      0.1, 
+      90,
+      window.innerWidth / window.innerHeight,
+      0.1,
       1000
     );
-    const renderer = new THREE.WebGLRenderer();
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const renderer = new THREE.WebGLRenderer({alpha: true});
+    renderer.setSize(window.innerWidth / 2, window.innerHeight/2);
     mountRef.current.appendChild(renderer.domElement);
+    
+    //Orbit controls
+    const controls = new OrbitControls(camera, renderer.domElement);
 
-    // Geometría simple
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+    scene.add(ambientLight);
 
-    scene.add(cube);
-    camera.position.z = 5;
+    loader.load('../../public/low_poly_borzoi.fbx', (object) => {
+      scene.add(object);
+
+      object.position.set(0, -1.7, 0);
+      object.scale.set(0.4, .4, .4);
+      object.rotation.set(0, 2, 0)
+    }, (xhr) => {
+      // Callback llamado durante el progreso de la carga
+      console.log((xhr.loaded / xhr.total * 100) + '% cargado');
+    }, (error) => {
+      // Callback llamado en caso de error
+      console.error('Un error ocurrió durante la carga:', error);
+    });
+
+    camera.position.set(2, 0, 2);
+
 
     // Animación
     const animate = () => {
       requestAnimationFrame(animate);
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
       renderer.render(scene, camera);
+      controls.update();
     };
 
     animate();

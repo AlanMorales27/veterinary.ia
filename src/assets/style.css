@@ -1,0 +1,46 @@
+main{
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: space-between;  
+
+}
+
+.principal-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    vertical-align: center;
+    width: 50%;
+    height: 100%;
+}
+
+    .container-form{
+        display: flex;
+        flex-direction: column;
+    }
+
+        .container-form textarea{
+            resize: none;
+        }
+        
+            #prompt{
+                height: 100px;
+                padding: 10px;
+                font-size: 1.1rem;
+            }
+
+            #response{
+                height: 50px;
+
+            }
+
+        .container-form button{
+            margin: 10px;
+            border: 1px solid black;
+        }
+
+.three-container{
+    width: 50%;
+}

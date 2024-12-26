@@ -1,52 +1,43 @@
 import React, { useEffect, useState } from 'react';
+import './assets/style.css';
+import ThreeScene from './components/three';
 
 const App = () => {
-  const [net, setNet] = useState(null);
+
+  const razas_perro = ["raza1", "raza2", "raza3", "raza4", "raza5", "raza6"];
   
-  useEffect(() => {
-    // Cargar brain.js desde CDN
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/brain.js';
-    script.async = true;
-    script.onload = () => initNetwork();
-    document.head.appendChild(script);
-    
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-
-  const initNetwork = () => {
-    if (window.brain) {
-      const network = new window.brain.NeuralNetwork();
-      network.train([
-        { input: [0, 0], output: [0] },
-        { input: [0, 1], output: [1] },
-        { input: [1, 0], output: [1] },
-        { input: [1, 1], output: [0] }
-      ]);
-      setNet(network);
-    }
-  };
-
-  const predict = () => {
-    if (net) {
-      const result = net.run([1, 0]);
-      alert(`Predicción: ${result[0].toFixed(4)}`);
-    }
-  };
-
-  return (
-    <div className="p-4">
-      <button 
-        onClick={predict}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-        disabled={!net}
-      >
-        Hacer predicción
-      </button>
-    </div>
-  );
+  return(
+    <main>
+      <div className='principal-container'>
+        <h1>
+          Veterinary.ia 
+        </h1>
+        <form className='container-form' action="">
+          <label htmlFor="nameDog">Nombre del paciente</label>
+          <input type="text" id='nameDog'/>
+          <label htmlFor="namePerson">Nombre del propietario</label>
+          <input type="text" id='namePerson'/>
+          <label htmlFor="select1"> Raza de perro</label>
+          <select name="" id="select1">
+            {razas_perro.map((e) => <option value={razas_perro.indexOf(e)}>{e}</option>)}
+          </select>
+          <textarea 
+            name="" 
+            id="prompt" 
+            placeholder='Ingrese los sintomas del paciente'>
+            </textarea>
+          <button>
+            Generar Diagnostico
+          </button>
+          <textarea name="" id="response" disabled></textarea>
+        </form>
+      </div>
+      <div className='three-container'>
+          {/* Three.js */}
+          <ThreeScene/>
+      </div>
+    </main>
+  )
 };
 
 export default App;
