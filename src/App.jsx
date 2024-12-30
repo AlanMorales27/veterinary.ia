@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import {useState} from 'react';
 import './assets/style.css';
 import ThreeScene from './components/three';
-import data from "./assets/data/data-example.js"
+
 const App = () => {
-
+  const [result, setResult] = useState();
   const razas_perro = ["raza1", "raza2", "raza3", "raza4", "raza5", "raza6"];
-  
   const net = new brain.NeuralNetwork();
-  net.train(data);
 
+  net.train(
+    [{input: [1],
+      output: [0]
+    },
+    {input: [6],
+      output: [1]
+    },]
+  )
 
+  const output = net.run([2]);
+  console.log(output);
 
   return(
     <main>
@@ -23,8 +31,14 @@ const App = () => {
           <label htmlFor="namePerson">Nombre del propietario</label>
           <input type="text" id='namePerson'/>
           <label htmlFor="select1"> Raza de perro</label>
-          <select name="" id="select1">
-            {razas_perro.map((e) => <option value={razas_perro.indexOf(e)}>{e}</option>)}
+          <select onChange = {e => setResult(e.target.value)}
+                  name="" 
+                  id="select1">
+            {razas_perro.map((e, index) => 
+              <option key={index} 
+                      value={e}>
+                      {e}
+              </option>)}
           </select>
           <textarea 
             name="" 
@@ -34,7 +48,7 @@ const App = () => {
           <button>
             Generar Diagnostico
           </button>
-          <textarea name="" id="response" disabled></textarea>
+          <textarea value = {result} name="" id="response" disabled></textarea>
         </form>
       </div>
       <div className='three-container'>
